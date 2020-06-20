@@ -1,17 +1,13 @@
-import java.math.*;
-
 /**
- *  Tests calcForceExertedBy
+ * Test planets
  */
-public class TestCalcForceExertedBy {
-
+public class TestPlanet {
     /**
-     *  Tests calcForceExertedBy.
+     * Test planets
      */
     public static void main(String[] args) {
-        checkCalcForceExertedBy();
+        checkPairwiseForce();
     }
-
     /**
      *  Checks whether or not two Doubles are equal and prints the result.
      *
@@ -28,18 +24,18 @@ public class TestCalcForceExertedBy {
         }
     }
 
-
     /**
-     *  Checks the Planet class to make sure calcForceExertedBy works.
+     *  Checks the Planet class to make sure it works.
      */
-    private static void checkCalcForceExertedBy() {
-        System.out.println("Checking calcForceExertedBy...");
+    private static void checkPairwiseForce() {
+        System.out.println("Checking pairwiseForce...");
 
-        Planet p1 = new Planet(1.0, 1.0, 3.0, 4.0, 5.0, "jupiter.gif");
-        Planet p2 = new Planet(2.0, 1.0, 3.0, 4.0, 4e11, "jupiter.gif");
-        Planet p3 = new Planet(4.0, 5.0, 3.0, 4.0, 5.0, "jupiter.gif");
+        Planet p1 = new Planet(1e12, 2e11, 0.0, 0.0, 2e13, "jupiter.gif");
+        Planet p2 = new Planet(2.3e12, 9.5e11, 0.0, 0.0, 6e26, "jupiter.gif");
 
-        checkEquals(p1.calcForceExertedBy(p2), 133.4, "calcForceExertedBy()", 0.01);
-        checkEquals(p1.calcForceExertedBy(p3), 6.67e-11, "calcForceExertedBy()", 0.01);
+        checkEquals(p1.calcForceExertedByX(p2), 3.1e22, "F1x()", 0.01);
+        checkEquals(p1.calcForceExertedByY(p2), 1.8e22, "F1y()", 0.01);
+        checkEquals(p2.calcForceExertedByX(p1), -3.1e22, "F1x()", 0.01);
+        checkEquals(p2.calcForceExertedByY(p1), -1.8e22, "F1y()", 0.01);
     }
 }

@@ -86,6 +86,7 @@ public class StdDrawDemo {
 		}
 
 		while (size > 1) {
+			StdDraw.enableDoubleBuffering();
 			StdDraw.clear();
 			StdDraw.picture(0, 0, imageToDraw, size, size);
 			StdDraw.show();
