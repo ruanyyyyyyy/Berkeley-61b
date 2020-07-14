@@ -19,10 +19,18 @@ public class ArrayDeque<T> {
         items = a;
     }
 
+    private int addOne(int a) {
+        return (a + 1) % items.length;
+
+    }
+    private int subOne(int b) {
+        return (b - 1 + items.length) % items.length;
+    }
+
+
     /** make sure the usage factor be at least 25% for arrays of length 16 or more */
     private void modifyUsageFactor() {
-        double usageFactor = Double.valueOf(size) / items.length;
-        if ((items.length > 15) && (usageFactor < 0.25)) {
+        if ((items.length > 15) && (size < items.length / 4)) {
             resize((items.length / 2)); //FIXME change the double to integer type
         }
     }
@@ -34,10 +42,7 @@ public class ArrayDeque<T> {
         }
         items[nextFirst] = x;
         size += 1;
-        nextFirst -= 1;
-        if (nextFirst < 0) {
-            nextFirst += 8;
-        }
+        nextFirst = subOne(nextFirst);
 
     }
     /** Insert x into the back of the list. */
@@ -47,7 +52,7 @@ public class ArrayDeque<T> {
         }
         items[nextLast] = x;
         size += 1;
-        nextLast = (nextLast + 1) % 8;
+        nextLast = addOne(nextLast);
     }
     public boolean isEmpty() {
         return size == 0;
@@ -90,7 +95,9 @@ public class ArrayDeque<T> {
     }
     /** Get the ith item in the list (0 is the front).*/
     public T get(int i) {
-        return items[i];
+        int start = addOne(nextFirst);
+        int index = (start + i) % items.length;
+        return items[index];
     }
 
 }

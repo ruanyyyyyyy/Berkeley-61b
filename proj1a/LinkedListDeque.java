@@ -11,7 +11,7 @@ public class LinkedListDeque<T> {
         }
     }
     private Node sentinel;
-    public int size;
+    private int size;
 
     /** create an empty linkedListDeque. */
     public LinkedListDeque() {
@@ -60,8 +60,7 @@ public class LinkedListDeque<T> {
             sentinel.next = sentinel.next.next;
             sentinel.next.prior = sentinel;
             return x;
-        }
-        else {
+        } else {
             return null;
         }
 
@@ -74,8 +73,7 @@ public class LinkedListDeque<T> {
             sentinel.prior = sentinel.prior.prior;
             sentinel.prior.next = sentinel;
             return x;
-        }
-        else {
+        } else {
             return null;
         }
     }

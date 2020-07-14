@@ -10,7 +10,7 @@ public class ArrayDequeTest {
         ad1.addFirst(1);
         ad1.addFirst(2);
         int gotItem = ad1.get(0);
-        assertEquals(0, gotItem);
+        assertEquals(2, gotItem);
     }
 
 
