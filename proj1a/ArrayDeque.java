@@ -37,7 +37,7 @@ public class ArrayDeque<T> {
     /** make sure the usage factor be at least 25% for arrays of length 16 or more */
     private void modifyUsageFactor() {
         if ((items.length > 15) && (size < items.length / 4)) {
-            resize((items.length / 2)); //FIXME change the double to integer type
+            resize((items.length / 2)); //FIXME: change the double to integer type
         }
     }
 
@@ -90,13 +90,11 @@ public class ArrayDeque<T> {
      * @return T
      */
     public T removeLast() {
-        T x = items[size - 1];
-        items[size - 1] = null;
+        int pos = subOne(nextLast);
+        T x = items[pos];
+        items[pos] = null;
         size = size - 1;
-        nextLast -= 1;
-        if (nextLast < 0) {
-            nextLast += 8;
-        }
+        nextLast = subOne(nextLast);
         return x;
 
     }
