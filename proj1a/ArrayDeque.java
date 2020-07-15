@@ -108,4 +108,11 @@ public class ArrayDeque<T> {
         return items[index];
     }
 
+    public void printDeque() {
+        for (int i = 0; i < size; i += 1) {
+            int pos = addOne(nextFirst) + i;
+            System.out.print(items[pos] + " ");
+        }
+    }
+
 }

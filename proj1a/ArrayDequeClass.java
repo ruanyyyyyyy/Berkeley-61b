@@ -106,12 +106,20 @@ public class ArrayDequeClass {
         printTestStatus(passed);
 
     }
+    public static void testPrintDeque() {
+        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
+        ad1.addFirst(1);
+        ad1.addLast(2);
+        ad1.printDeque();
+
+    }
 
 
     public static void main(String[] args) {
         System.out.println("Running tests.\n");
         // addLastRemoveLastIsEmpty();
-        removeEmptyArray();
+        // removeEmptyArray();
+        testPrintDeque();
 
 
     }
