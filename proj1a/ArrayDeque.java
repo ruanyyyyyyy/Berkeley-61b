@@ -33,7 +33,6 @@ public class ArrayDeque<T> {
         return (b - 1 + items.length) % items.length;
     }
 
-
     /** make sure the usage factor be at least 25% for arrays of length 16 or more */
     private void modifyUsageFactor() {
         if ((items.length > 15) && (size < items.length / 4)) {
@@ -66,11 +65,7 @@ public class ArrayDeque<T> {
     public int size() {
         return size;
     }
-    public void printDeque() {
-        for (int i = 0; i < size; i += 1) {
-            System.out.print(items[i] + " ");
-        }
-    }
+
 
     /** Deletes item from front of the list and
      * return deleted items.
@@ -80,6 +75,7 @@ public class ArrayDeque<T> {
         if (size == 0) {
             return null;
         }
+        modifyUsageFactor();
         int pos = addOne(nextFirst);
         T x = items[pos];
         items[pos] = null;
@@ -96,6 +92,7 @@ public class ArrayDeque<T> {
         if (size == 0) {
             return null;
         }
+        modifyUsageFactor();
         int pos = subOne(nextLast);
         T x = items[pos];
         items[pos] = null;
