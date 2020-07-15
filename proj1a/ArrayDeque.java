@@ -77,6 +77,9 @@ public class ArrayDeque<T> {
      * @return T
      */
     public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
         int pos = addOne(nextFirst);
         T x = items[pos];
         items[pos] = null;
@@ -90,6 +93,9 @@ public class ArrayDeque<T> {
      * @return T
      */
     public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
         int pos = subOne(nextLast);
         T x = items[pos];
         items[pos] = null;

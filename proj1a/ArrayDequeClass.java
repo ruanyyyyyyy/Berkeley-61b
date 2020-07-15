@@ -94,12 +94,13 @@ public class ArrayDequeClass {
 
     }
 
-    public static void addGetRecursiveTest() {
-        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-        lld1.addFirst(0);
-        int result = lld1.getRecursive(0);
+    public static void removeEmptyArray() {
+        ArrayDeque<Integer> ad1 = new ArrayDeque<Integer>();
+        ad1.removeFirst();
+        ad1.removeLast();
+
         boolean passed = false;
-        if (result == 0) {
+        if (ad1.size() == 0) {
             passed = true;
         }
         printTestStatus(passed);
@@ -107,11 +108,10 @@ public class ArrayDequeClass {
     }
 
 
-
-
     public static void main(String[] args) {
         System.out.println("Running tests.\n");
-        addLastRemoveLastIsEmpty();
+        // addLastRemoveLastIsEmpty();
+        removeEmptyArray();
 
 
     }
