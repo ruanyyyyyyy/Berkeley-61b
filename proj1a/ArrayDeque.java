@@ -14,9 +14,15 @@ public class ArrayDeque<T> {
 
     /** Resize the underlying array to the target capacity. */
     private void resize(int capacity) {
-        T[] a = (T[]) new Object[capacity];
-        System.arraycopy(items, 0, a, 0, size);
-        items = a;
+        T[] newItems = (T[]) new Object[capacity];
+        int oldStart = addOne(nextFirst);
+        for (int i = 0; i < size; i += 1) {
+            newItems[i] = items[oldStart];
+            oldStart = addOne(oldStart);
+        }
+        this.items = newItems;
+        nextFirst = items.length - 1;
+        nextLast = size;
     }
 
     private int addOne(int a) {
@@ -71,10 +77,11 @@ public class ArrayDeque<T> {
      * @return T
      */
     public T removeFirst() {
-        T x = items[0];
-        items[0] = null;
+        int pos = addOne(nextFirst);
+        T x = items[pos];
+        items[pos] = null;
         size = size - 1;
-        nextFirst = (nextFirst + 1) % 8;
+        nextFirst = addOne(nextFirst);
         return x;
 
     }

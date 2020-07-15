@@ -105,16 +105,8 @@ public class LinkedListDequeTest {
 
     }
 
-    public static void removeFromEmpty() {
-        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-        lld1.removeFirst();
-        lld1.removeLast();
-        boolean passed = false;
-        if (lld1.size == 0) {
-            passed = true;
-        }
-        printTestStatus(passed);
-    }
+
+
 
     public static void main(String[] args) {
         System.out.println("Running tests.\n");
@@ -122,7 +114,7 @@ public class LinkedListDequeTest {
         addRemoveTest();
         addGetTest();
         addGetRecursiveTest();
-        removeFromEmpty();
+
 
     }
 }
