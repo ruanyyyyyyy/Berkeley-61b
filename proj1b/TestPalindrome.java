@@ -18,6 +18,16 @@ public class TestPalindrome {
 
     @Test
     public void testIsPalindrome() {
+        assertFalse(palindrome.isPalindrome("cat"));
+        assertFalse((palindrome.isPalindrome("horse")));
+
+        assertTrue(palindrome.isPalindrome("w"));
+        assertTrue(palindrome.isPalindrome(""));
+        assertTrue(palindrome.isPalindrome("werew"));
+        assertTrue(palindrome.isPalindrome("weew"));
+        assertTrue(palindrome.isPalindrome("aaaa"));
+
+
         CharacterComparator cc = new OffByOne();
         assertFalse(palindrome.isPalindrome("cat", cc));
         assertFalse((palindrome.isPalindrome("horse", cc)));
