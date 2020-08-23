@@ -1,7 +1,7 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/** Demos the version of assertEquals with a String message. */
+/** Demos the version of assertEquals with a String message.*/
 public class AssertEqualsStringDemo {
     @Test
     public void test1() {

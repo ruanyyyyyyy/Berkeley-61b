@@ -6,48 +6,66 @@ import org.junit.Test;
 public class TestArrayDequeGold {
 
     @Test
-    public void testRandomCall() {
+    public void testAdd() {
         StudentArrayDeque<Integer> sad1 = new StudentArrayDeque<>();
         ArrayDequeSolution<Integer> rightad1 = new ArrayDequeSolution<>();
 
         for (int i = 0; i < 10; i += 1) {
             double numberZeroOne = StdRandom.uniform();
-            if (numberZeroOne < 0.25) {
+            if (numberZeroOne < 0.5) {
                 sad1.addFirst(i);
+                assertFalse(sad1.size() == 0);
                 rightad1.addFirst(i);
-            } else if (numberZeroOne < 0.5) {
-                sad1.addLast(i);
-                rightad1.addLast(i);
-            } else if (numberZeroOne < 0.75) {
-                if (sad1.size() > 0) {
-                    Integer a1 = sad1.removeFirst();
-                    Integer a2 = rightad1.removeFirst();
-                    assertTrue(a1.equals(a2));
-                }
             } else {
-                if (sad1.size() > 0) {
-                    Integer a1 =sad1.removeLast();
-                    Integer a2 =rightad1.removeFirst();
-                    assertTrue(a1.equals(a2));
-                }
+                sad1.addLast(i);
+                assertFalse(sad1.size() == 0);
+                rightad1.addLast(i);
             }
 
         }
 
     }
 
-}
-
-    StudentArrayDeque<Integer> sad1 = new StudentArrayDeque<>();
+    @Test
+    public void testRemove() {
+        StudentArrayDeque<Integer> sad1 = new StudentArrayDeque<>();
+        ArrayDequeSolution<Integer> rightad1 = new ArrayDequeSolution<>();
 
         for (int i = 0; i < 10; i += 1) {
-        double numberBetweenZeroAndOne = StdRandom.uniform();
+            double numberZeroOne = StdRandom.uniform();
+            if (numberZeroOne < 0.5) {
+                sad1.addFirst(i);
+                rightad1.addFirst(i);
+                assertEquals(sad1.removeFirst(), rightad1.removeFirst());
+            } else {
+                sad1.addLast(i);
+                rightad1.addLast(i);
+                assertEquals(sad1.removeLast(), rightad1.removeLast());
+            }
 
-        if (numberBetweenZeroAndOne < 0.5) {
-        sad1.addLast(i);
-        } else {
-        sad1.addFirst(i);
-        }
         }
 
-        sad1.printDeque();
+    }
+
+    @Test
+    public void testRandomCall() {
+        StudentArrayDeque<Integer> sad1 = new StudentArrayDeque<>();
+        ArrayDequeSolution<Integer> rightad1 = new ArrayDequeSolution<>();
+        sad1.addFirst(5);
+        rightad1.addFirst(5);
+
+        sad1.addLast(3);
+        rightad1.addLast(3);
+
+        sad1.addFirst(1);
+        rightad1.addFirst(1);
+
+        assertEquals(rightad1.removeFirst(), sad1.removeFirst());
+        assertEquals(rightad1.removeLast(), sad1.removeLast());
+        assertEquals(rightad1.removeLast(), sad1.removeLast());
+        assertEquals(rightad1.size(), sad1.size());
+        
+
+    }
+
+}
