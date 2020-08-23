@@ -22,14 +22,13 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>  {
     }
 
     /**
-     * enqueue x to the array
+     * enqueue x to the array.
      * @param x
      */
     public void enqueue(T x) {
         if (isFull()) {
             throw new RuntimeException("Ring buffer overflow");
-        }
-        else {
+        } else {
             rb[last] = x;
             last = (last + 1) % capacity;
             fillCount += 1;
@@ -46,8 +45,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>  {
     public T dequeue() {
         if (isEmpty()) {
             throw new RuntimeException("Ring buffer underflow");
-        }
-        else {
+        } else {
             T outItem = rb[first];
             rb[first] = null;
             first = (first + 1) % capacity;
@@ -62,8 +60,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>  {
     public T peek() {
         if (isEmpty()) {
             throw new RuntimeException("Ring buffer underflow");
-        }
-        else {
+        } else {
             T outItem = rb[first];
             return outItem;
         }
@@ -94,15 +91,6 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>  {
 
     }
 
-    public static void main(String[] args) {
-        ArrayRingBuffer<Integer> arb = new ArrayRingBuffer<>(5);
-        arb.enqueue(1);
-        arb.enqueue(2);
-        arb.enqueue(3);
 
-        for (int i : arb) {
-            System.out.println(i);
-        }
-    }
 
 }
