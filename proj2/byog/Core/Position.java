@@ -1,9 +1,8 @@
 package byog.Core;
 
 public class Position {
-    public int x;
-    public int y;
-    public boolean flag = false;
+    protected int x;
+    protected int y;
 
     public Position(int xp, int yp) {
         x = xp;
@@ -30,23 +29,20 @@ public class Position {
      */
     public Position[] surrounding() {
         Position[] p = new Position[8];
-        p[0] = new Position(x-1, y-1);
-        p[1] = new Position(x-1, y);
-        p[2] = new Position(x-1, y+1);
-        p[3] = new Position(x, y-1);
-        p[4] = new Position(x+1, y-1);
-        p[5] = new Position(x+1, y);
-        p[6] = new Position(x+1, y+1);
-        p[7] = new Position(x, y+1);
+        p[0] = new Position(x - 1, y - 1);
+        p[1] = new Position(x - 1, y);
+        p[2] = new Position(x - 1, y + 1);
+        p[3] = new Position(x, y - 1);
+        p[4] = new Position(x + 1, y - 1);
+        p[5] = new Position(x + 1, y);
+        p[6] = new Position(x + 1, y + 1);
+        p[7] = new Position(x, y + 1);
 
         return p;
     }
 
     public boolean near(Position p) {
-        if ((Math.abs(p.x-x)==1 && p.y==y) || (p.x==x && Math.abs(p.y-y) == 1)) {
-            return true;
-        } else {
-            return false;
-        }
+        return ((Math.abs(p.x - x) == 1 && p.y == y)
+                || (p.x == x && Math.abs(p.y - y) == 1));
     }
 }

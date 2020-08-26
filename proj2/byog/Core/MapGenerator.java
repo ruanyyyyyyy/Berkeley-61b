@@ -1,26 +1,21 @@
 package byog.Core;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 
 public class MapGenerator {
-    public TERenderer ter;
-    public static int width;
-    public static int height;
+    private TERenderer ter;
+    private static int width;
+    private static int height;
     private TETile[][] finalWorld;
-    public long seed;
-    public Random random;
-    public Set<Position> largestFloorSet;
+    private long seed;
+    private Random random;
+    private Set<Position> largestFloorSet;
 
     public MapGenerator(String s,  TERenderer t, int w, int h) {
 
@@ -58,7 +53,7 @@ public class MapGenerator {
      */
     public void initWorld() {
         for (int i = 0; i < width; i += 1) {
-            for (int j = 0; j < height; j+= 1) {
+            for (int j = 0; j < height; j += 1) {
                 finalWorld[i][j] = Tileset.NOTHING;
             }
         }
@@ -80,7 +75,7 @@ public class MapGenerator {
             for (int j = 0; j < h; j += 1) {
                 xCoord = p.x + i;
                 yCoord = p.y + j;
-                if ( i==0 || i==w-1 || j==0 || j == h-1) {
+                if (i == 0 || i == w - 1 || j == 0 || j == h - 1) {
                     if (!intersect(xCoord, yCoord)) {
                         finalWorld[xCoord][yCoord] = Tileset.WALL;
                     }
@@ -106,7 +101,8 @@ public class MapGenerator {
     }
 
     public Position generateRandomPos(int spaceNeeded) {
-        return new Position(random.nextInt(width - spaceNeeded), random.nextInt(height - spaceNeeded));
+        return new Position(random.nextInt(width - spaceNeeded),
+                random.nextInt(height - spaceNeeded));
     }
 
     /**
@@ -130,14 +126,15 @@ public class MapGenerator {
             }
             return len;
         } else {
-            throw new IllegalArgumentException("type should be r(room) or h(hallway).");
+            throw new IllegalArgumentException();
         }
     }
 
     public void multipleRoom(int count) {
         for (int i = 0; i < count; i += 1) {
             Position p = generateRandomPos(4);
-            newRoom(p, generateRandomLen(p.x, width, 'r'), generateRandomLen(p.y, height, 'r'));
+            newRoom(p, generateRandomLen(p.x, width, 'r'),
+                    generateRandomLen(p.y, height, 'r'));
         }
     }
 
@@ -198,7 +195,7 @@ public class MapGenerator {
         MapGenerator m = new MapGenerator(args[0], ter, w, h);
         m.initWorld();
         m.multipleRoom(10);
-        m.multipleHallways(20,40);
+        m.multipleHallways(20, 40);
         m.findLargestFloorSet();
         m.deleteFragment();
 

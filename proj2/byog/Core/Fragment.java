@@ -56,6 +56,6 @@ public class Fragment {
     }
 
     public boolean valid(Position p) {
-        return p.x >=0 && p.x < world.length && p.y >= 0 && p.y < world[0].length;
+        return p.x >= 0 && p.x < world.length && p.y >= 0 && p.y < world[0].length;
     }
 }
