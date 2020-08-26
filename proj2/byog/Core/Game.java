@@ -32,12 +32,15 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-        TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        MapGenerator m = new MapGenerator(input, ter, WIDTH, HEIGHT);
+        m.initWorld();
+        m.multipleRoom(10);
+        m.multipleHallways(20,40);
+        m.findLargestFloorSet();
+        m.deleteFragment();
 
-
-
-
-
+        TETile[][] finalWorldFrame = m.getFinalWorld();
+        ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
 }

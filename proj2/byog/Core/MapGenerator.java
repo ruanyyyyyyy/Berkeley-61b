@@ -40,6 +40,7 @@ public class MapGenerator {
         ter.initialize(width, height);
         finalWorld = new TETile[width][height];
         random = new Random(seed);
+
     }
 
     public MapGenerator(TETile[][] world, TERenderer t) {
@@ -47,7 +48,9 @@ public class MapGenerator {
         this.ter = t;
         width = world.length;
         height = world[0].length;
+
         ter.initialize(width, height);
+
     }
 
     /**
@@ -201,4 +204,5 @@ public class MapGenerator {
 
         m.ter.renderFrame(m.getFinalWorld());
     }
+
 }
