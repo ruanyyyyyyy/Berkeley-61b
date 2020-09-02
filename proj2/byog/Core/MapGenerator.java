@@ -43,7 +43,6 @@ public class MapGenerator {
         this.ter = t;
         width = world.length;
         height = world[0].length;
-
         ter.initialize(width, height);
 
     }

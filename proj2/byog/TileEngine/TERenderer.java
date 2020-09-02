@@ -1,7 +1,5 @@
 package byog.TileEngine;
-
-import edu.princeton.cs.introcs.StdDraw;
-
+import byog.stddraw.StdDraw;
 import java.awt.Color;
 import java.awt.Font;
 
