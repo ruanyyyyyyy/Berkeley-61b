@@ -1,7 +1,6 @@
 package byog.SaveDemo;
 
-//import edu.princeton.cs.introcs.StdDraw;
-import byog.stddraw.StdDraw;
+import edu.princeton.cs.introcs.StdDraw;
 import java.io.Serializable;
 import java.awt.Color;
 
