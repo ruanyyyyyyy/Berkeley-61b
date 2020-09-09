@@ -40,7 +40,7 @@ public class Game {
         m.deleteFragment();
 
         TETile[][] finalWorldFrame = m.getFinalWorld();
-        ter.renderFrame(finalWorldFrame);
+        // ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
 }
