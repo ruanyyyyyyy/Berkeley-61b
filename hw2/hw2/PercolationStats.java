@@ -7,9 +7,9 @@ import java.lang.Math;
 
 public class PercolationStats {
 
-    int N, T;
-    PercolationFactory pf;
-    double[] perThres;
+    private int N;
+    private int T;
+    private double[] perThres;
 
     /* perform T independent experiments on an N-by-N grid */
     public PercolationStats(int N, int T, PercolationFactory pf) {
@@ -67,13 +67,6 @@ public class PercolationStats {
 
     }
 
-    public static void main(String[] args) {
-        PercolationFactory pf = new PercolationFactory();
-        PercolationStats pls = new PercolationStats(20, 50, pf);
-        System.out.println(pls.mean());
-        System.out.println(pls.confidenceLow());
-        System.out.println(pls.confidenceHigh());
-    }
 
 
 }

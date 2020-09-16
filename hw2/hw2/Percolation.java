@@ -4,17 +4,18 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import java.lang.*;
 
 public class Percolation {
-    static public boolean[][] sites;
-    WeightedQuickUnionUF qunion;
+    private boolean[][] sites;
+    private WeightedQuickUnionUF qunion;
     private int superSource;
     private int superDes;
     private int size = 0;
+    private int N;
     /* create N-by-N grid, with all sites initially blocked */
     public Percolation(int N){
         if (N <= 0) {
             throw new IllegalArgumentException("N must be larger than 0");
         }
-
+        this.N = N;
         sites = new boolean[N][N];
         for (boolean[] ints : sites) {
             for (boolean i : ints) {
@@ -78,7 +79,7 @@ public class Percolation {
         if (row < 0 || row >= N || col < 0 || col >= N) {
             throw new IndexOutOfBoundsException("row and col should be between 0 and N-1");
         } else {
-            return (qunion.connected(superSource, superDes) && qunion.connected(xyTo1D(row,col), superSource));
+            return qunion.connected(xyTo1D(row,col), superSource);
         }
     }
 
@@ -89,18 +90,17 @@ public class Percolation {
 
     /* does the system percolate? */
     public boolean percolates() {
+        if ( N == 1) {
+            return true;
+        }
         return qunion.connected(superSource, superDes);
     }
 
     /* use for unit testing (not required) */
     public static void main(String[] args) {
-        Percolation per = new Percolation(5);
-        per.open(3,4);
-        per.open(2,4);
-        per.open(2,3);
-        per.open(2,2);
-        per.open(1,2);
-        per.open(0,2);
+        Percolation per = new Percolation(6);
+        per.open(0,5);
+        System.out.println(per.isFull(0,5));
         System.out.println(per.numberOfOpenSites());
         System.out.println(per.percolates());
 
