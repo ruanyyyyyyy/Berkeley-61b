@@ -26,13 +26,6 @@ public class Percolation {
         qunion = new WeightedQuickUnionUF(N*N + 2);
         superSource = N*N;
         superDes = N*N + 1;
-        for (int j = 0; j < N; j += 1) {
-            int index1D = xyTo1D(0, j);
-            qunion.union(superSource, index1D);
-            index1D = xyTo1D(N-1, j);
-            qunion.union(superDes, index1D);
-        }
-
 
     }
 
@@ -47,6 +40,14 @@ public class Percolation {
             throw new IndexOutOfBoundsException("row and col should be between 0 and N-1");
         } else {
             sites[row][col] = true;
+            if (row == 0) {
+                qunion.union(superSource, xyTo1D(row, col));
+            }
+            if (row == N-1) {
+                if (qunion.connected(superSource, xyTo1D(row, col))) {
+                    qunion.union(superDes, xyTo1D(row, col));
+                }
+            }
             size += 1;
             if (row-1 >= 0 && sites[row-1][col] == true) {
                 qunion.union(xyTo1D(row-1, col), xyTo1D(row, col));
