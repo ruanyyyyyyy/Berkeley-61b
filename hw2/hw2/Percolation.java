@@ -14,7 +14,7 @@ public class Percolation {
     /* create N-by-N grid, with all sites initially blocked */
     public Percolation(int N) {
         if (N <= 0) {
-            throw new java.lang.IllegalArgumentException("N must be larger than 0");
+            throw new java.lang.IllegalArgumentException();
         }
         this.n = N;
         sites = new boolean[N][N];
@@ -38,10 +38,10 @@ public class Percolation {
     /* open the site (row, col) if it is not open already */
     public void open(int row, int col) {
         if (row < 0 || row >= n || col < 0 || col >= n) {
-            throw new java.lang.IndexOutOfBoundsException("row and col should be between 0 and N-1");
+            throw new java.lang.IndexOutOfBoundsException();
         } else {
 
-            if (sites[row][col] == false) {
+            if (!sites[row][col]) {
                 sites[row][col] = true;
                 size += 1;
             }
@@ -77,7 +77,7 @@ public class Percolation {
     public boolean isOpen(int row, int col) {
         int N = sites[0].length;
         if (row < 0 || row >= N || col < 0 || col >= N) {
-            throw new java.lang.IndexOutOfBoundsException("row and col should be between 0 and N-1");
+            throw new java.lang.IndexOutOfBoundsException();
         } else {
             return sites[row][col];
         }
@@ -87,7 +87,7 @@ public class Percolation {
     public boolean isFull(int row, int col) {
         int N = sites[0].length;
         if (row < 0 || row >= N || col < 0 || col >= N) {
-            throw new java.lang.IndexOutOfBoundsException("row and col should be between 0 and N-1");
+            throw new java.lang.IndexOutOfBoundsException();
         } else {
             return qunion.connected(xyTo1D(row, col), superSource);
         }
