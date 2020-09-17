@@ -54,19 +54,19 @@ public class Percolation {
                 connectunion.union(superDes, xyTo1D(row, col));
             }
 
-            if (row - 1 >= 0 && sites[row - 1][col] == true) {
+            if (row - 1 >= 0 && sites[row - 1][col]) {
                 qunion.union(xyTo1D(row - 1, col), xyTo1D(row, col));
                 connectunion.union(xyTo1D(row - 1, col), xyTo1D(row, col));
             }
-            if (row <= n - 2 && sites[row + 1][col] == true) {
+            if (row <= n - 2 && sites[row + 1][col]) {
                 qunion.union(xyTo1D(row + 1, col), xyTo1D(row, col));
                 connectunion.union(xyTo1D(row + 1, col), xyTo1D(row, col));
             }
-            if (col - 1 >= 0 && sites[row][col - 1] == true) {
+            if (col - 1 >= 0 && sites[row][col - 1]) {
                 qunion.union(xyTo1D(row, col - 1), xyTo1D(row, col));
                 connectunion.union(xyTo1D(row, col - 1), xyTo1D(row, col));
             }
-            if (col <= n - 2 && sites[row][col + 1] == true) {
+            if (col <= n - 2 && sites[row][col + 1]) {
                 qunion.union(xyTo1D(row, col + 1), xyTo1D(row, col));
                 connectunion.union(xyTo1D(row, col + 1), xyTo1D(row, col));
             }
