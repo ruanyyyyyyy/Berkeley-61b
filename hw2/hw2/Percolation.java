@@ -40,7 +40,12 @@ public class Percolation {
         if (row < 0 || row >= n || col < 0 || col >= n) {
             throw new java.lang.IndexOutOfBoundsException("row and col should be between 0 and N-1");
         } else {
-            sites[row][col] = true;
+
+            if (sites[row][col] == false) {
+                sites[row][col] = true;
+                size += 1;
+            }
+
             if (row == 0) {
                 qunion.union(superSource, xyTo1D(row, col));
                 connectunion.union(superSource, xyTo1D(row, col));
@@ -48,7 +53,7 @@ public class Percolation {
             if (row == n - 1) {
                 connectunion.union(superDes, xyTo1D(row, col));
             }
-            size += 1;
+
             if (row - 1 >= 0 && sites[row - 1][col] == true) {
                 qunion.union(xyTo1D(row - 1, col), xyTo1D(row, col));
                 connectunion.union(xyTo1D(row - 1, col), xyTo1D(row, col));
