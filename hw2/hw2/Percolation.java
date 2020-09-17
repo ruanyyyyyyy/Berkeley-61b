@@ -6,6 +6,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     private boolean[][] sites;
     private WeightedQuickUnionUF qunion;
+    private WeightedQuickUnionUF connectunion;
     private int superSource;
     private int superDes;
     private int size = 0;
@@ -24,6 +25,7 @@ public class Percolation {
         }
 
         qunion = new WeightedQuickUnionUF(N * N + 2);
+        connectunion = new WeightedQuickUnionUF(N * N + 2);
         superSource = N * N;
         superDes = N * N + 1;
 
@@ -41,24 +43,27 @@ public class Percolation {
             sites[row][col] = true;
             if (row == 0) {
                 qunion.union(superSource, xyTo1D(row, col));
+                connectunion.union(superSource, xyTo1D(row, col));
             }
             if (row == n - 1) {
-                if (qunion.connected(superSource, xyTo1D(row, col))) {
-                    qunion.union(superDes, xyTo1D(row, col));
-                }
+                connectunion.union(superDes, xyTo1D(row, col));
             }
             size += 1;
             if (row - 1 >= 0 && sites[row - 1][col] == true) {
                 qunion.union(xyTo1D(row - 1, col), xyTo1D(row, col));
+                connectunion.union(xyTo1D(row - 1, col), xyTo1D(row, col));
             }
             if (row <= n - 2 && sites[row + 1][col] == true) {
                 qunion.union(xyTo1D(row + 1, col), xyTo1D(row, col));
+                connectunion.union(xyTo1D(row + 1, col), xyTo1D(row, col));
             }
             if (col - 1 >= 0 && sites[row][col - 1] == true) {
                 qunion.union(xyTo1D(row, col - 1), xyTo1D(row, col));
+                connectunion.union(xyTo1D(row, col - 1), xyTo1D(row, col));
             }
             if (col <= n - 2 && sites[row][col + 1] == true) {
                 qunion.union(xyTo1D(row, col + 1), xyTo1D(row, col));
+                connectunion.union(xyTo1D(row, col + 1), xyTo1D(row, col));
             }
         }
     }
@@ -90,8 +95,7 @@ public class Percolation {
 
     /* does the system percolate? */
     public boolean percolates() {
-
-        return qunion.connected(superSource, superDes);
+        return connectunion.connected(superSource, superDes);
     }
 
     /* use for unit testing (not required) */
