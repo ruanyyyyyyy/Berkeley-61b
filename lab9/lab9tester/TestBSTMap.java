@@ -2,6 +2,7 @@ package lab9tester;
 
 import static org.junit.Assert.*;
 
+import org.junit.Assert;
 import org.junit.Test;
 import lab9.BSTMap;
 
@@ -112,6 +113,14 @@ public class TestBSTMap {
         b.put(8, "hi");
         b.put(10, "hi");
         String str = b.remove(2);
+    }
+
+    @Test
+    public void testRemoveRootEdge() {
+        BSTMap<Integer, String> b = new BSTMap<>();
+        b.put(5, "hi");
+        String str = b.remove(5);
+
     }
 
     public static void main(String[] args) {
