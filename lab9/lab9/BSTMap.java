@@ -120,6 +120,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
+        visit(root);
         return keyset;
     }
 
@@ -146,9 +147,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
         int cmp = key.compareTo(p.key);
         if (cmp < 0) {
-            return p.left = removeHelper(key, p.left);
+            p.left = removeHelper(key, p.left);
         } else if (cmp > 0) {
-            return p.right = removeHelper(key, p.right);
+            p.right = removeHelper(key, p.right);
         } else {
             if (p.right == null) return p.left;
             if (p.left == null) return p.right;
@@ -157,8 +158,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             p.right = deleteMin(t.right);
             p.left = t.left;
             size -= 1;
-            return p;
         }
+        return p;
     }
 
     /** Removes KEY from the tree if present
