@@ -30,15 +30,13 @@ public class TestSimpleOomage {
           meaning no two SimpleOomages should EVER have the same
           hashCode UNLESS they have the same red, blue, and green values!
          */
-        SimpleOomage ooA = new SimpleOomage(5, 10, 20);
-        SimpleOomage ooA2 = new SimpleOomage(15, 5, 15);
-        SimpleOomage ooA3 = new SimpleOomage(25, 5, 5);
+        SimpleOomage ooA = new SimpleOomage(45, 50, 185);
+        SimpleOomage ooA2 = new SimpleOomage(55, 220, 130);
         HashSet<SimpleOomage> hs = new HashSet<>();
         hs.add(ooA);
         assertNotEquals(ooA, ooA2);
+        assertNotEquals(ooA.hashCode(), ooA2.hashCode());
         assertFalse(hs.contains(ooA2));
-        assertFalse(hs.contains(ooA3));
-
     }
 
     @Test

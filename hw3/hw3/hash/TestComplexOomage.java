@@ -30,7 +30,6 @@ public class TestComplexOomage {
         for (int i = 0; i < N; i += 1) {
             oomages.add(ComplexOomage.randomComplexOomage());
         }
-
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 10));
     }
 
@@ -46,11 +45,8 @@ public class TestComplexOomage {
         for (int i = 0; i < N; i += 1) {
             deadlyList.add(ComplexOomage.deadlyComplexOomage());
         }
-
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
 
-
-        assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
     }
 
     /** Calls tests for SimpleOomage. */
