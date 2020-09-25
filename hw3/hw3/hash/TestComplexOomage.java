@@ -1,6 +1,6 @@
 package hw3.hash;
 
-import edu.princeton.cs.algs4.Complex;
+/*import edu.princeton.cs.algs4.Complex;*/
 import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -44,12 +44,12 @@ public class TestComplexOomage {
         int N = 10000;
 
         for (int i = 0; i < N; i += 1) {
-            int Num = StdRandom.uniform(4, 10);
-            ArrayList<Integer> params = new ArrayList<>(Num);
-            for (int j = 0; j < Num-4; j += 1) {
+            int num = StdRandom.uniform(4, 10);
+            ArrayList<Integer> params = new ArrayList<>(num);
+            for (int j = 0; j < num - 4; j += 1) {
                 params.add(StdRandom.uniform(0, 255));
             }
-            for (int j = Num-4; j < Num; j += 1) {
+            for (int j = num - 4; j < num; j += 1) {
                 params.add(2);
             }
             ComplexOomage o = new ComplexOomage(params);
