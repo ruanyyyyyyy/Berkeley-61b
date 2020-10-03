@@ -122,28 +122,18 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
 
-        int lIdx = leftIndex(index), rIdx = rightIndex(index);
-        if (lIdx > size()) {
-            return;
-        }
-        if ((lIdx == size) && (getNode(index).priority() > getNode(lIdx).priority())) {
-            swap(lIdx, index);
-            return;
-        }
-        while ((getNode(index).myPriority > getNode(lIdx).myPriority)
-                || (getNode(index).myPriority > getNode(rIdx).myPriority)) {
-            int smallerIdx = min(lIdx, rIdx);
-            swap(smallerIdx, index);
-            index = smallerIdx;
-            lIdx = leftIndex(index);
-            rIdx = rightIndex(index);
-            if (rIdx > size) {
+        while ( 2 * index <= size()) {
+            int j = 2 * index;
+            if (j < size() && min(j, j + 1) == j) {
+                j += 1;
+            }
+            if (min(index, j) != j) {
                 break;
             }
+            swap(index, j);
+            index = j;
         }
-        if ((lIdx == size) && (getNode(index).priority() > getNode(lIdx).priority())) {
-            swap(lIdx, index);
-        }
+
         return;
     }
 
@@ -184,12 +174,14 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T removeMin() {
+
         T minItem = peek();
         swap(1, size);
         size -= 1;
         if (size() > 1) {
             sink(1);
         }
+        contents[size + 1] = null;
 
         return minItem;
     }
@@ -461,6 +453,31 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             assertEquals(expected[i], pq.removeMin());
             i += 1;
         }
+    }
+
+    @Test
+    public void testInsertAndRemoveAll() {
+        ExtrinsicPQ<String> pq = new ArrayHeap<>();
+        pq.insert("c", 3);
+        pq.insert("i", 9);
+        pq.insert("g", 7);
+        pq.insert("d", 4);
+        pq.insert("a", 1);
+        pq.insert("h", 8);
+        pq.insert("e", 5);
+        pq.insert("b", 2);
+        pq.insert("c", 3);
+        pq.insert("d", 4);
+
+        int i = 0;
+        String[] expected = {"a", "b", "c", "c", "d", "d", "e", "g", "h", "i"};
+        while (pq.size() > 1) {
+            assertEquals(expected[i], pq.removeMin());
+            i += 1;
+        }
+        pq.removeMin();
+        assertEquals(0, pq.size());
+
     }
 
     @Test
