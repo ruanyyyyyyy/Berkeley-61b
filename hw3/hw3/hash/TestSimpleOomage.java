@@ -36,6 +36,8 @@ public class TestSimpleOomage {
         SimpleOomage ooB2 = new SimpleOomage(0, 35, 0);
         SimpleOomage ooC = new SimpleOomage(0, 0, 155);
         SimpleOomage ooC2 = new SimpleOomage(0, 5, 0);
+        SimpleOomage ooD = new SimpleOomage(0, 0, 0);
+        SimpleOomage ooD2 = new SimpleOomage(0, 0, 85);
         Set<SimpleOomage> hs = new HashSet<>();
         hs.add(ooA);
         assertNotEquals(ooA, ooA2);
@@ -43,6 +45,7 @@ public class TestSimpleOomage {
         assertFalse(hs.contains(ooA2));
         assertNotEquals(ooB.hashCode(), ooB2.hashCode());
         assertNotEquals(ooC.hashCode(), ooC2.hashCode());
+        assertNotEquals(ooD.hashCode(), ooD2.hashCode());
     }
 
     @Test
