@@ -214,7 +214,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         Node curN;
-        for (int i = 0; i < size(); i += 1) {
+        for (int i = 1; i <= size(); i += 1) {
             curN = getNode(i);
             if (curN.item().equals(item)) {
                 if (priority > curN.priority()) {
@@ -461,6 +461,28 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             assertEquals(expected[i], pq.removeMin());
             i += 1;
         }
+    }
+
+    @Test
+    public void testChangePriority() {
+        ArrayHeap<String> pq = new ArrayHeap<>();
+        pq.insert("c", 3);
+        pq.insert("i", 9);
+        pq.insert("g", 7);
+        pq.insert("d", 4);
+        pq.insert("a", 1);
+        pq.insert("h", 8);
+        pq.insert("e", 5);
+        pq.insert("b", 2);
+        pq.insert("c", 3);
+        pq.insert("d", 4);
+        System.out.println("PQ before changing priority:");
+        System.out.println(pq);
+
+        pq.changePriority("h", 2);
+        System.out.println("PQ after changing priority:");
+        System.out.println(pq);
+        assertEquals("h", pq.contents[3].myItem);
     }
 
 }
