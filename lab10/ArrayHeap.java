@@ -124,7 +124,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
         while ( 2 * index <= size()) {
             int j = 2 * index;
-            if (j < size() && min(j, j + 1) == j) {
+            if (j < size() && min(j, j + 1) != j) {
                 j += 1;
             }
             if (min(index, j) != j) {
@@ -500,6 +500,11 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         System.out.println("PQ after changing priority:");
         System.out.println(pq);
         assertEquals("h", pq.contents[3].myItem);
+
+        pq.changePriority("a", 10);
+        System.out.println("PQ after changing priority:");
+        System.out.println(pq);
+        assertEquals("a", pq.contents[6].myItem);
     }
 
 }
