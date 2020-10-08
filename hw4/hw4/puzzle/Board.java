@@ -1,8 +1,7 @@
 package hw4.puzzle;
 import edu.princeton.cs.algs4.Queue;
-import java.lang.*;
 
-public class Board implements WorldState{
+public class Board implements WorldState {
 
     private int[][] board;
     private final int BLANK = 0;
@@ -79,7 +78,7 @@ public class Board implements WorldState{
         int count = 0;
         for (int i = 0; i < size; i += 1) {
             for (int j = 0; j < size; j += 1) {
-                if (tileAt(i,j) != (i * size + j + 1) && tileAt(i, j) != BLANK) {
+                if (tileAt(i, j) != (i * size + j + 1) && tileAt(i, j) != BLANK) {
                     count += 1;
                 }
             }
@@ -88,7 +87,8 @@ public class Board implements WorldState{
     }
 
     /**
-     * manhattan estimate : The sum of the Manhattan distances (sum of the vertical and horizontal distance)
+     * manhattan estimate : The sum of the Manhattan distances
+     * (sum of the vertical and horizontal distance)
      * from the tiles to their goal positions.
      */
     public int manhattan() {
@@ -125,6 +125,9 @@ public class Board implements WorldState{
             return false;
         }
         Board boardy = (Board) y;
+        if (this.size() != boardy.size()) {
+            return false;
+        }
         for (int i = 0; i < size; i += 1) {
             for (int j = 0; j < size; j += 1) {
                 if (tileAt(i, j) != boardy.tileAt(i, j)) {
@@ -149,7 +152,7 @@ public class Board implements WorldState{
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tileAt(i,j)));
+                s.append(String.format("%2d ", tileAt(i, j)));
             }
             s.append("\n");
         }

@@ -25,8 +25,8 @@ public class Solver {
         }
     }
 
-    MinPQ<SearchNode> pq;
-    SearchNode finalNode;
+    private MinPQ<SearchNode> pq;
+    private SearchNode finalNode;
 
     public Solver(WorldState initial) {
         pq = new MinPQ<>();
@@ -39,8 +39,8 @@ public class Solver {
                 finalNode = X;
                 break;
             }
-            for(WorldState w: X.ws.neighbors()) {
-                if (X.prev==null || !X.prev.ws.equals(w)) {
+            for (WorldState w: X.ws.neighbors()) {
+                if (X.prev == null || !X.prev.ws.equals(w)) {
                     SearchNode newNode = new SearchNode(w, X.madeMoves + 1, X);
                     pq.insert(newNode);
                 }
