@@ -6,16 +6,17 @@ public class WordPuzzleSolver {
      * Test routine for your Solver class. Uncomment and run to test
      * your basic functionality.
      **********************************************************************/
-    /*public static void main(String[] args) {
-        String start = "cube";
-        String goal = "tubes";
+    public static void main(String[] args) {
+        String start = "horse"; //"cube";
+        String goal = "nurse"; //"tubes";
 
         Word startState = new Word(start, goal);
         Solver solver = new Solver(startState);
 
+        int number = solver.moves();
         StdOut.println("Minimum number of moves = " + solver.moves());
         for (WorldState ws : solver.solution()) {
             StdOut.println(ws);
         }
-    }*/
+    }
 }

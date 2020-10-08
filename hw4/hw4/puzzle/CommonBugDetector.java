@@ -67,6 +67,11 @@ public class CommonBugDetector {
         public int hashCode() {
             return Objects.hash(name);
         }
+
+        @Override
+        public String toString() {
+            return Character.toString(name);
+        }
     }
 
 
@@ -75,7 +80,8 @@ public class CommonBugDetector {
         Solver s = new Solver(cbps);
 
         // s.moves() should be 5
-        System.out.println("s.moves() should be 5, and your s.moves() is: " + s.moves());
+        int pNum = s.moves();
+        System.out.println("s.moves() should be 5, and your s.moves() is: " + pNum);
 
         AlphabetEasyPuzzle aep = new AlphabetEasyPuzzle('a');
         Solver s3 = new Solver(aep);
@@ -83,5 +89,7 @@ public class CommonBugDetector {
                            + " enqueued in your MinPQ and compare to the comments.");
         // if you print out the total number of items enqueued by s3
         // it should be approximately 25, not approximately 50.
+        int num = s3.moves();
+        System.out.println("total number of items enqueued by s3 is " + num);
     }
 }
