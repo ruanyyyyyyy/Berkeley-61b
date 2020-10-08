@@ -13,7 +13,6 @@ public class WordPuzzleSolver {
         Word startState = new Word(start, goal);
         Solver solver = new Solver(startState);
 
-        int number = solver.moves();
         StdOut.println("Minimum number of moves = " + solver.moves());
         for (WorldState ws : solver.solution()) {
             StdOut.println(ws);
