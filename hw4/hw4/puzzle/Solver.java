@@ -19,6 +19,7 @@ public class Solver {
             this.madeMoves = madeMoves;
             this.prev = prev;
             this.priority = madeMoves + ws.estimatedDistanceToGoal();
+
         }
     }
 
