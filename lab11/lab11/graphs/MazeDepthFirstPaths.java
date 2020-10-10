@@ -1,5 +1,6 @@
 package lab11.graphs;
 
+
 /**
  *  @author Josh Hug
  */
@@ -13,6 +14,7 @@ public class MazeDepthFirstPaths extends MazeExplorer {
     private int t;
     private boolean targetFound = false;
     private Maze maze;
+
 
 
     public MazeDepthFirstPaths(Maze m, int sourceX, int sourceY, int targetX, int targetY) {
