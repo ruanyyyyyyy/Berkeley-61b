@@ -8,6 +8,8 @@ public class CountingSortTester {
      * CountingSort.betterCountingSort can handle.
      **/
     private static int[] someNegative = {9, 5, -4, 2, 1, -2, 5, 3, 0, -2, 3, 1, 1};
+    private static int[] nonPositive = {-9, -5, -4, -2, -1, -2, -5, -3, 0, -2, -3, -1, -1};
+    private static int[] allNegative = {-9, -5, -4, -2, -1, -2, -5, -3, -2, -3, -1, -1};
 
     /**
      * Array that both sorts should sort successfully.
@@ -51,6 +53,18 @@ public class CountingSortTester {
     public void testBetterWithSomeNegative() {
         int[] sortedSomeNegative = CountingSort.betterCountingSort(someNegative);
         assertIsSorted(sortedSomeNegative);
+    }
+
+    @Test
+    public void testBetterWithNonPositive() {
+        int[] sortedNonPositive = CountingSort.betterCountingSort(nonPositive);
+        assertIsSorted(sortedNonPositive);
+    }
+
+    @Test
+    public void testBetterWithAllNegative() {
+        int[] sortedAllNegative = CountingSort.betterCountingSort(allNegative);
+        assertIsSorted(sortedAllNegative);
     }
 
 

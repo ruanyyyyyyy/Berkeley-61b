@@ -67,43 +67,32 @@ public class CountingSort {
      */
     public static int[] betterCountingSort(int[] arr) {
         // TODO make counting sort work with arrays containing negative numbers.
-
-        int m = 0;
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
         for (int i: arr) {
-            if (i < 0) m += 1;
+            max = max < i? i: max;
+            min = min > i? i: min;
         }
-        if (m == 0) {
-            int[] sorted = naiveCountingSort(arr);
-            return sorted;
-        }
-        int[] negArr = new int[m];
-        int[] nonNegArr = new int[arr.length - m];
 
-        int p = 0, q = 0;
+        int totalLength = max - min + 1;
+        int[] count = new int[totalLength];
         for (int i: arr) {
-            if (i < 0) {
-                negArr[p] = -i;
-                p += 1;
-            } else {
-                nonNegArr[q] = i;
-                q += 1;
+            count[i - min] += 1;
+        }
+
+        // when we're dealing with ints, we can just put each value
+        // count number of times into the new array
+        int[] sorted = new int[arr.length];
+        int k = 0;
+        for (int i = 0; i < totalLength; i += 1) {
+            for (int j = 0; j < count[i]; j += 1, k += 1) {
+                sorted[k] = i + min;
             }
         }
 
-        int[] sortedNegArr = naiveCountingSort(negArr);
-        int[] sortedNonNegArr = naiveCountingSort(nonNegArr);
-
-        int[] sorted = new int[arr.length];
-        int j = 0;
-        for (int i = sortedNegArr.length - 1; i >=0; i -= 1) {
-            sorted[j] = -sortedNegArr[i];
-            j += 1;
-        }
-        for (int i : sortedNonNegArr){
-            sorted[j] = i;
-            j += 1;
-        }
         return sorted;
 
     }
+
+
 }
