@@ -53,7 +53,7 @@ public class SeamCarver {
 
     /* energy of pixel at column x and row y */
     public  double energy(int x, int y) {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
+        if (x < 0 || x >= energy.length || y < 0 || y >= energy[0].length) {
             throw new java.lang.IndexOutOfBoundsException();
         }
         return energy[x][y];
@@ -62,24 +62,17 @@ public class SeamCarver {
     private int findMinIndex(double[][] M) {
         int col = M.length; //x
         int row = M[0].length; //y
-        double min = M[0][0];
+        double min = M[0][row - 1];
         int index = 0;
         for (int x = 0; x < col-1; x += 1) {
-            if (min > M[x][0]) {
-                min = M[x][0];
+            if (min > M[x][row - 1]) {
+                min = M[x][row - 1];
                 index = x;
             }
         }
         return index;
     }
 
-    private int findMin2(double a, double b, int aI, int bI) {
-        if (a < b) {
-            return aI;
-        } else {
-            return bI;
-        }
-    }
 
     private int findMin3(double a, double b, double c, int aI, int bI, int cI) {
         if (a < b && a < c) {
@@ -112,28 +105,31 @@ public class SeamCarver {
         int het = energy[0].length;
         int[] vertSeam = new int[het];
         double[][] M = new double[wid][het];
+        int[][] backtrack = new int[wid][het]; // log
         for (int x = 0; x < wid; x += 1) {
             M[x][0] = energy[x][0];
+            backtrack[x][0] = x;
         }
         for (int y = 1; y < het; y += 1) {
-            for (int x = 1; x < wid - 1; x += 1) {
-                M[x][y] = energy[x][y] +
-                        Math.min(Math.min(M[x-1][y-1], M[x][y-1]), M[x+1][y-1]);
+            for (int x = 0; x < wid; x += 1) {
+                double min = 0;
+                if (x == 0) {
+                    min = M[0][y-1] < M[1][y-1] ? M[0][y-1] : M[1][y-1];
+                    backtrack[x][y] = M[0][y-1] < M[1][y-1] ? 0 : 1;
+                } else if (x == wid - 1) {
+                    min = M[wid-2][y-1] < M[wid-1][y-1] ? M[wid-2][y-1] : M[wid-1][y-1];
+                    backtrack[x][y] = M[wid-2][y-1] < M[wid-1][y-1] ? wid-2 : wid - 1;
+                } else {
+                    min = Math.min(Math.min(M[x-1][y-1], M[x][y-1]), M[x+1][y-1]);
+                    backtrack[x][y] = findMin3(M[x-1][y-1], M[x][y-1], M[x+1][y-1], x - 1, x, x + 1);
+                }
+                M[x][y] = energy(x, y) + min;
             }
-            M[0][y] = energy[0][y] + Math.min(M[0][y-1], M[1][y-1]);
-            M[wid-1][y] = energy[wid-1][y] + Math.min(M[wid-2][y-1], M[wid-1][y-1]);
         }
         int index = findMinIndex(M);
-        vertSeam[0] = index;
-        for (int y = 1; y < het; y += 1) {
-            if (index == 0) {
-                vertSeam[y] = findMin2(M[index][y], M[index+1][y], index, index + 1);
-            } else if (index == wid - 1) {
-                vertSeam[y] = findMin2(M[index-1][y], M[index][y], index - 1, index);
-            } else {
-                vertSeam[y] = findMin3(M[index-1][y], M[index][y], M[index+1][y],
-                        index - 1, index, index+1);
-            }
+        vertSeam[het - 1] = index;
+        for (int y = het - 2; y >= 0; y -= 1) {
+            vertSeam[y] = backtrack[index][y + 1];
             index = vertSeam[y];
         }
         return vertSeam;
