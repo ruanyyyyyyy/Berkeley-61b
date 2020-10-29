@@ -158,10 +158,16 @@ public class SeamCarver {
     /* remove horizontal seam from picture */
     public void removeHorizontalSeam(int[] seam) {
         this.pic = SeamRemover.removeHorizontalSeam(this.pic, seam);
+        this.width = this.pic.width();
+        this.height = this.pic.height();
+        energyHelper();
     }
 
     /* remove vertical seam from picture */
     public void removeVerticalSeam(int[] seam) {
         this.pic = SeamRemover.removeVerticalSeam(this.pic, seam);
+        this.width = this.pic.width();
+        this.height = this.pic.height();
+        energyHelper();
     }
 }
