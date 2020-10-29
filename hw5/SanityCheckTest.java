@@ -54,6 +54,16 @@ public class SanityCheckTest {
         assertArrayEquals(expected, seam);
     }
 
+    @Test
+    public void testFindVerticalSeam() {
+        Picture p = new Picture("images/3x7.png");
+        SeamCarver sc = new SeamCarver(p);
+
+        int[] seam = sc.findVerticalSeam();
+        int[] expected = { 1, 2, 2, 2, 1, 2, 2};
+        assertArrayEquals(expected, seam);
+    }
+
     public static void main(String[] args) {
         jh61b.junit.TestRunner.runTests(SanityCheckTest.class);
     }

@@ -9,7 +9,7 @@ public class SeamCarver {
     private double[][] energy;
 
     public SeamCarver(Picture picture) {
-        pic = picture;
+        pic = new Picture(picture);
         width = picture.width();
         height = picture.height();
         energy = new double[width][height];
@@ -18,7 +18,8 @@ public class SeamCarver {
 
     /* current picture */
     public Picture picture() {
-        return pic;
+        Picture new_pic = new Picture(pic);
+        return new_pic;
     }
 
     /* width of current picture */
@@ -61,11 +62,11 @@ public class SeamCarver {
     private int findMinIndex(double[][] M) {
         int col = M.length; //x
         int row = M[0].length; //y
-        double min = M[0][row-1];
+        double min = M[0][0];
         int index = 0;
         for (int x = 0; x < col-1; x += 1) {
-            if (min > M[x][row-1]) {
-                min = M[x][row-1];
+            if (min > M[x][0]) {
+                min = M[x][0];
                 index = x;
             }
         }
@@ -123,8 +124,8 @@ public class SeamCarver {
             M[wid-1][y] = energy[wid-1][y] + Math.min(M[wid-2][y-1], M[wid-1][y-1]);
         }
         int index = findMinIndex(M);
-        vertSeam[het-1] = index;
-        for (int y = het - 2; y >= 0; y -= 1) {
+        vertSeam[0] = index;
+        for (int y = 1; y < het; y += 1) {
             if (index == 0) {
                 vertSeam[y] = findMin2(M[index][y], M[index+1][y], index, index + 1);
             } else if (index == wid - 1) {
