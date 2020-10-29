@@ -98,7 +98,7 @@ public class SeamCarverVisualizer {
 
          // draw
          frame.setContentPane(img.getJLabel());
-         frame.revalidate();
+         frame.invalidate();
          frame.repaint();
     }
 

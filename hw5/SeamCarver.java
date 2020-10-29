@@ -45,7 +45,7 @@ public class SeamCarver {
                 int deltay = (c3.getRed() - c4.getRed()) * (c3.getRed() - c4.getRed()) +
                         (c3.getGreen() - c4.getGreen()) * (c3.getGreen() - c4.getGreen()) +
                         (c3.getBlue() - c4.getBlue()) * (c3.getBlue() - c4.getBlue());
-                energy[x][y] = deltax * deltax + deltay * deltay;
+                energy[x][y] = deltax + deltay;
             }
         }
     }
@@ -99,49 +99,68 @@ public class SeamCarver {
 
     /* sequence of indices for horizontal seam*/
     public int[] findHorizontalSeam() {
-        int[] horizSeam = new int[height];
-        double[][] M = new double[width][height];
-        for (int x = 0; x < width; x += 1) {
-            M[x][0] = energy[x][0];
-        }
-        for (int y = 1; y < height; y += 1) {
-            for (int x = 1; x < width - 1; x += 1) {
-                M[x][y] = energy[x][y] +
-                        Math.min(Math.min(M[x-1][y-1], M[x][y-1]), M[x+1][y-1]);
-            }
-            M[0][y] = energy[0][y] + Math.min(M[0][y-1], M[1][y-1]);
-            M[width-1][y] = energy[width-1][y] + Math.min(M[width-2][y-1], M[width-1][y-1]);
-        }
-        int index = findMinIndex(M);
-        horizSeam[height-1] = index;
-        for (int y = height - 2; y >= 0; y -= 1) {
-            if (index == 0) {
-                horizSeam[y] = findMin2(M[index][y], M[index+1][y], index, index + 1);
-            } else if (index == width - 1) {
-                horizSeam[y] = findMin2(M[index-1][y], M[index][y], index - 1, index);
-            } else {
-                horizSeam[y] = findMin3(M[index-1][y], M[index][y], M[index+1][y],
-                        index - 1, index, index+1);
-            }
-            index = horizSeam[y];
-        }
+        energy = transposeImage(energy);
+        int[] horizSeam = findVerticalSeam();
+        energy = transposeImage(energy);
         return horizSeam;
     }
 
     /* sequence of indices for vertical seam */
     public int[] findVerticalSeam() {
-        int[] vertSeam = new int[width];
+        int wid = energy.length;
+        int het = energy[0].length;
+        int[] vertSeam = new int[het];
+        double[][] M = new double[wid][het];
+        for (int x = 0; x < wid; x += 1) {
+            M[x][0] = energy[x][0];
+        }
+        for (int y = 1; y < het; y += 1) {
+            for (int x = 1; x < wid - 1; x += 1) {
+                M[x][y] = energy[x][y] +
+                        Math.min(Math.min(M[x-1][y-1], M[x][y-1]), M[x+1][y-1]);
+            }
+            M[0][y] = energy[0][y] + Math.min(M[0][y-1], M[1][y-1]);
+            M[wid-1][y] = energy[wid-1][y] + Math.min(M[wid-2][y-1], M[wid-1][y-1]);
+        }
+        int index = findMinIndex(M);
+        vertSeam[het-1] = index;
+        for (int y = het - 2; y >= 0; y -= 1) {
+            if (index == 0) {
+                vertSeam[y] = findMin2(M[index][y], M[index+1][y], index, index + 1);
+            } else if (index == wid - 1) {
+                vertSeam[y] = findMin2(M[index-1][y], M[index][y], index - 1, index);
+            } else {
+                vertSeam[y] = findMin3(M[index-1][y], M[index][y], M[index+1][y],
+                        index - 1, index, index+1);
+            }
+            index = vertSeam[y];
+        }
         return vertSeam;
 
     }
 
+    /* transpose an image */
+    private double[][] transposeImage(double[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        double[][] transposedMatrix = new double[n][m];
+
+        for(int x = 0; x < n; x += 1) {
+            for (int y = 0; y < m; y += 1) {
+                transposedMatrix[x][y] = matrix[y][x];
+            }
+        }
+        return transposedMatrix;
+    }
+
     /* remove horizontal seam from picture */
     public void removeHorizontalSeam(int[] seam) {
-        pic = SeamRemover.removeHorizontalSeam(this.pic, seam);
+        this.pic = SeamRemover.removeHorizontalSeam(this.pic, seam);
     }
 
     /* remove vertical seam from picture */
     public void removeVerticalSeam(int[] seam) {
-
+        this.pic = SeamRemover.removeVerticalSeam(this.pic, seam);
     }
 }
