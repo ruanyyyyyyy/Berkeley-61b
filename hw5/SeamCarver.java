@@ -156,6 +156,7 @@ public class SeamCarver {
         this.pic = SeamRemover.removeHorizontalSeam(this.pic, seam);
         this.width = this.pic.width();
         this.height = this.pic.height();
+        energy = new double[this.width][this.height];
         energyHelper();
     }
 
