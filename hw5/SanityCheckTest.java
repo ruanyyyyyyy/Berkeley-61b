@@ -73,6 +73,35 @@ public class SanityCheckTest {
         int[] expected = {  0, 0, 1};
         assertArrayEquals(expected, seam);
     }
+    @Test
+    public void testFindVerticalSeam37() {
+        Picture p = new Picture("images/3x7.png");
+        SeamCarver sc = new SeamCarver(p);
+
+        int[] seam = sc.findVerticalSeam();
+        int[] expected = { 1, 2, 2, 2, 1, 2, 2};
+        assertArrayEquals(expected, seam);
+    }
+
+    @Test
+    public void testFindHSeam81() {
+        Picture p = new Picture("images/8x1.png");
+        SeamCarver sc = new SeamCarver(p);
+
+        int[] seam = sc.findHorizontalSeam();
+        int[] expected = { 0, 0, 0 ,0, 0, 0, 0, 0};
+        assertArrayEquals(expected, seam);
+    }
+
+    @Test
+    public void testFindHSeam46() {
+        Picture p = new Picture("images/4x6.png");
+        SeamCarver sc = new SeamCarver(p);
+
+        int[] seam = sc.findHorizontalSeam();
+        int[] expected = { 4, 3, 4, 4 };
+        assertArrayEquals(expected, seam);
+    }
 
     public static void main(String[] args) {
         jh61b.junit.TestRunner.runTests(SanityCheckTest.class);

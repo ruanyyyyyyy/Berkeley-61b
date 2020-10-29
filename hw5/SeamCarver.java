@@ -64,7 +64,7 @@ public class SeamCarver {
         int row = M[0].length; //y
         double min = M[0][row - 1];
         int index = 0;
-        for (int x = 0; x < col-1; x += 1) {
+        for (int x = 0; x < col; x += 1) {
             if (min > M[x][row - 1]) {
                 min = M[x][row - 1];
                 index = x;
@@ -114,8 +114,8 @@ public class SeamCarver {
             for (int x = 0; x < wid; x += 1) {
                 double min = 0;
                 if (x == 0) {
-                    min = M[0][y-1] < M[1][y-1] ? M[0][y-1] : M[1][y-1];
-                    backtrack[x][y] = M[0][y-1] < M[1][y-1] ? 0 : 1;
+                    min = M[x][y-1] < M[(x+1)%wid][y-1] ? M[x][y-1] : M[(x+1)%wid][y-1];
+                    backtrack[x][y] = M[0][y-1] < M[(x+1)%wid][y-1] ? 0 : (x+1)%wid;
                 } else if (x == wid - 1) {
                     min = M[wid-2][y-1] < M[wid-1][y-1] ? M[wid-2][y-1] : M[wid-1][y-1];
                     backtrack[x][y] = M[wid-2][y-1] < M[wid-1][y-1] ? wid-2 : wid - 1;
