@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * This class provides all code necessary to take a query box and produce
@@ -8,9 +9,22 @@ import java.util.Map;
  * not draw the output correctly.
  */
 public class Rasterer {
+    private ArrayList<Double> LonDPPdep = new ArrayList<Double>();
+    private double width, height;
+    private int tile_size;
 
     public Rasterer() {
         // YOUR CODE HERE
+        width = MapServer.ROOT_LRLON - MapServer.ROOT_ULLON;
+        height = MapServer.ROOT_ULLAT - MapServer.ROOT_LRLAT;
+        tile_size = MapServer.TILE_SIZE;
+        double temp = width / (tile_size * 2);
+        for (int i = 0; i < 7; i += 1) {
+            LonDPPdep.add(temp);
+            temp /= 2;
+        }
+        //LonDPPdep.get(0) = 0.000171661376953125(depth = 1)
+        //LonDPPdep.get(1) = 0.0000858306884765625(depth = 2)
     }
 
     /**
@@ -42,11 +56,42 @@ public class Rasterer {
      *                    forget to set this to true on success! <br>
      */
     public Map<String, Object> getMapRaster(Map<String, Double> params) {
-        // System.out.println(params);
+        System.out.println(params);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
-                           + "your browser.");
+        // System.out.println("Since you haven't implemented getMapRaster, nothing is displayed in "
+                           // + "your browser.");
+        double lrlon = params.get("lrlon");
+        double ullon = params.get("ullon");
+        double w = params.get("w");
+        double h = params.get("h");
+        double ullat = params.get("ullat");
+        double lrlat = params.get("lrlat");
+
+        // find the appropriate depth
+        double LonDPP = (lrlon - ullon) / w;
+        int depth = 0;
+        for (int i = 0; i < LonDPPdep.size(); i += 1) {
+            depth = i;
+            if (LonDPPdep.get(i) <= LonDPP) {
+                break;
+            }
+        }
+        infos(7, 5, 18);
+        //hello world思想，从最简单的开始
+        //难点：每一层左上角坐标附近的tile name
         return results;
+    }
+
+    /* calculate this tile's information => ullon, ullat, lrlon, lrlat, distance per pixel  */
+    /* haven't tested this function!! */
+    private void infos(int dep, int x, int y) {
+        double widNum = width / Math.pow(2, dep);
+        double ullon = MapServer.ROOT_ULLON + widNum * x;
+        double lrlon = MapServer.ROOT_LRLON + widNum * x;
+        double heightNum = height / Math.pow(2, dep);
+        double ullat= MapServer.ROOT_ULLAT - heightNum * y;
+        double lrlat = MapServer.ROOT_LRLAT - heightNum * y;
+
     }
 
 }
