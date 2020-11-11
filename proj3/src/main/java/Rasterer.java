@@ -9,9 +9,10 @@ import java.util.ArrayList;
  * not draw the output correctly.
  */
 public class Rasterer {
-    private ArrayList<Double> LonDPPdep = new ArrayList<Double>();
+    private ArrayList<Double> LonDPPdep = new ArrayList<>();
     private double width, height;
     private int tile_size;
+    private boolean success = true;
 
     public Rasterer() {
         // YOUR CODE HERE
@@ -79,7 +80,89 @@ public class Rasterer {
         infos(7, 5, 18);
         //hello world思想，从最简单的开始
         //难点：每一层左上角坐标附近的tile name
+
+        //recursively search which tile the upper left point lies in among the four candidates subimages
+        // index! not lon/lat values
+        int res_ullon = locate(ullon, MapServer.ROOT_ULLON, MapServer.ROOT_LRLON, depth);
+        int res_ullat= locate(ullat, MapServer.ROOT_LRLAT, MapServer.ROOT_ULLAT, depth);
+        int res_lrlon = locate(lrlon, MapServer.ROOT_ULLON, MapServer.ROOT_LRLON, depth);
+        int res_lrlat = locate(lrlat, MapServer.ROOT_LRLAT, MapServer.ROOT_ULLAT, depth);
+
+        String[][] render_grid = renderGrid(res_ullon, res_ullat, res_lrlon, res_lrlat, depth);
+        results.put("render_grid", render_grid);
+
+        double raster_ul_lon = rasterLon(res_ullon, depth);
+        results.put("raster_ul_lon", raster_ul_lon);
+
+        double raster_ul_lat = rasterLat(res_ullat, depth);
+        results.put("raster_ul_lat", raster_ul_lat);
+
+        double raster_lr_lon = rasterLon(res_lrlon, depth);
+        results.put("raster_lr_lon", raster_lr_lon);
+
+        double raster_lr_lat = rasterLat(res_lrlat, depth);
+        results.put("raster_lr_lat", raster_lr_lat);
+
+        results.put("depth", depth);
+
+        results.put("query_success", success);
         return results;
+
+    }
+
+    private double rasterLon(int res_lon, int depth) {
+        double len = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / Math.pow(2, depth);
+        return MapServer.ROOT_ULLON + len * res_lon;
+    }
+
+    private double rasterLat(int res_lat, int depth) {
+        double len = (MapServer.ROOT_ULLAT - MapServer.ROOT_LRLON) / Math.pow(2, depth);
+        return MapServer.ROOT_LRLON + len * res_lat;
+    }
+
+    /* x is ullon of the query, rootbound1 is left, rootbound2 is right;
+    * x is  ullat of the query, rootbound1 is lower, rootbound2 is upper.
+    * rootbound1 < rootbound2
+    * */
+    private int locate(double x, double rootbound1, double rootbound2, int depth) {
+        int location = 0;
+        if (x < rootbound1 || x >= rootbound2) success = false;
+        for (int i = 0; i < depth; i += 1) {
+            double middle = rootbound1 + (rootbound2 - rootbound1) / 2;
+            if (x < middle) {
+                rootbound2 = middle;
+                location = location * 2;
+            }
+            if (x >= middle) {
+                rootbound1 = middle;
+                location = location * 2 + 1;
+            }
+        }
+        return location;
+    }
+
+    /* [[d2_x0_y1.png, d2_x1_y1.png, d2_x2_y1.png, d2_x3_y1.png],
+        [d2_x0_y2.png, d2_x1_y2.png, d2_x2_y2.png, d2_x3_y2.png],
+        [d2_x0_y3.png, d2_x1_y3.png, d2_x2_y3.png, d2_x3_y3.png]] */
+    private String[][] renderGrid(int res_ullon, int res_ullat, int res_lrlon, int res_lrlat, int depth) {
+        int cols = res_lrlon - res_ullon + 1;
+        int rows = res_lrlat - res_ullat + 1;
+        String[][] render_grid = new String[rows][cols];
+        for (int i = 0; i < rows; i += 1) {
+            for (int j = 0; j < cols; j += 1) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("d");
+                sb.append(depth);
+                sb.append("_");
+                sb.append(res_ullon + i);
+                sb.append("_");
+                sb.append("y");
+                sb.append(res_ullat + i);
+                sb.append(".png");
+                render_grid[i][j] = sb.toString();
+            }
+        }
+        return render_grid;
     }
 
     /* calculate this tile's information => ullon, ullat, lrlon, lrlat, distance per pixel  */
