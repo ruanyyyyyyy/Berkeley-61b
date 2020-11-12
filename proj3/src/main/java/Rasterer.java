@@ -77,16 +77,17 @@ public class Rasterer {
                 break;
             }
         }
-        infos(7, 5, 18);
+        depth += 1;
+
         //hello world思想，从最简单的开始
         //难点：每一层左上角坐标附近的tile name
 
         //recursively search which tile the upper left point lies in among the four candidates subimages
-        // index! not lon/lat values
-        int res_ullon = locate(ullon, MapServer.ROOT_ULLON, MapServer.ROOT_LRLON, depth);
-        int res_ullat= locate(ullat, MapServer.ROOT_LRLAT, MapServer.ROOT_ULLAT, depth);
-        int res_lrlon = locate(lrlon, MapServer.ROOT_ULLON, MapServer.ROOT_LRLON, depth);
-        int res_lrlat = locate(lrlat, MapServer.ROOT_LRLAT, MapServer.ROOT_ULLAT, depth);
+        // index! not lon/lat values, is the upper left of the chosen tiles
+        int res_ullon = locateX(ullon, MapServer.ROOT_ULLON, MapServer.ROOT_LRLON, depth);
+        int res_ullat= locateY(ullat, MapServer.ROOT_LRLAT, MapServer.ROOT_ULLAT, depth);
+        int res_lrlon = locateX(lrlon, MapServer.ROOT_ULLON, MapServer.ROOT_LRLON, depth);
+        int res_lrlat = locateY(lrlat, MapServer.ROOT_LRLAT, MapServer.ROOT_ULLAT, depth);
 
         String[][] render_grid = renderGrid(res_ullon, res_ullat, res_lrlon, res_lrlat, depth);
         results.put("render_grid", render_grid);
@@ -96,11 +97,11 @@ public class Rasterer {
 
         double raster_ul_lat = rasterLat(res_ullat, depth);
         results.put("raster_ul_lat", raster_ul_lat);
-
-        double raster_lr_lon = rasterLon(res_lrlon, depth);
+        // calculate the upper left lat and lon. So for the lower right, plus 1
+        double raster_lr_lon = rasterLon(res_lrlon + 1, depth);
         results.put("raster_lr_lon", raster_lr_lon);
 
-        double raster_lr_lat = rasterLat(res_lrlat, depth);
+        double raster_lr_lat = rasterLat(res_lrlat + 1, depth);
         results.put("raster_lr_lat", raster_lr_lat);
 
         results.put("depth", depth);
@@ -116,17 +117,17 @@ public class Rasterer {
     }
 
     private double rasterLat(int res_lat, int depth) {
-        double len = (MapServer.ROOT_ULLAT - MapServer.ROOT_LRLON) / Math.pow(2, depth);
-        return MapServer.ROOT_LRLON + len * res_lat;
+        double len = (MapServer.ROOT_ULLAT - MapServer.ROOT_LRLAT) / Math.pow(2, depth);
+        return MapServer.ROOT_ULLAT - len * res_lat;
     }
 
     /* x is ullon of the query, rootbound1 is left, rootbound2 is right;
     * x is  ullat of the query, rootbound1 is lower, rootbound2 is upper.
     * rootbound1 < rootbound2
     * */
-    private int locate(double x, double rootbound1, double rootbound2, int depth) {
+    private int locateX(double x, double rootbound1, double rootbound2, int depth) {
         int location = 0;
-        if (x < rootbound1 || x >= rootbound2) success = false;
+        if (x < rootbound1 || x > rootbound2) success = false;
         for (int i = 0; i < depth; i += 1) {
             double middle = rootbound1 + (rootbound2 - rootbound1) / 2;
             if (x < middle) {
@@ -136,6 +137,22 @@ public class Rasterer {
             if (x >= middle) {
                 rootbound1 = middle;
                 location = location * 2 + 1;
+            }
+        }
+        return location;
+    }
+    private int locateY(double y, double rootbound1, double rootbound2, int depth) {
+        int location = 0;
+        if (y < rootbound1 || y > rootbound2) success = false;
+        for (int i = 0; i < depth; i += 1) {
+            double middle = rootbound1 + (rootbound2 - rootbound1) / 2;
+            if (y < middle) {
+                rootbound2 = middle;
+                location = location * 2 + 1;
+            }
+            if (y >= middle) {
+                rootbound1 = middle;
+                location = location * 2;
             }
         }
         return location;
@@ -153,28 +170,15 @@ public class Rasterer {
                 StringBuilder sb = new StringBuilder();
                 sb.append("d");
                 sb.append(depth);
-                sb.append("_");
-                sb.append(res_ullon + i);
-                sb.append("_");
-                sb.append("y");
+                sb.append("_x");
+                sb.append(res_ullon + j);
+                sb.append("_y");
                 sb.append(res_ullat + i);
                 sb.append(".png");
                 render_grid[i][j] = sb.toString();
             }
         }
         return render_grid;
-    }
-
-    /* calculate this tile's information => ullon, ullat, lrlon, lrlat, distance per pixel  */
-    /* haven't tested this function!! */
-    private void infos(int dep, int x, int y) {
-        double widNum = width / Math.pow(2, dep);
-        double ullon = MapServer.ROOT_ULLON + widNum * x;
-        double lrlon = MapServer.ROOT_LRLON + widNum * x;
-        double heightNum = height / Math.pow(2, dep);
-        double ullat= MapServer.ROOT_ULLAT - heightNum * y;
-        double lrlat = MapServer.ROOT_LRLAT - heightNum * y;
-
     }
 
 }
