@@ -68,6 +68,20 @@ public class Rasterer {
         double ullat = params.get("ullat");
         double lrlat = params.get("lrlat");
 
+        if (lrlon < MapServer.ROOT_ULLON || ullon > MapServer.ROOT_LRLON
+        || ullat < MapServer.ROOT_LRLAT || lrlat > MapServer.ROOT_ULLAT
+        || lrlon < ullon || ullat < lrlat) {
+            success = false;
+            results.put("render_grid", null);
+            results.put("raster_ul_lon", 0);
+            results.put("raster_ul_lat", 0);
+            results.put("raster_lr_lon", 0);
+            results.put("raster_lr_lat", 0);
+            results.put("depth", 0);
+            results.put("query_success", success);
+            return results;
+        }
+
         // find the appropriate depth
         double LonDPP = (lrlon - ullon) / w;
         int depth = 0;
@@ -127,7 +141,7 @@ public class Rasterer {
     * */
     private int locateX(double x, double rootbound1, double rootbound2, int depth) {
         int location = 0;
-        if (x < rootbound1 || x > rootbound2) success = false;
+
         for (int i = 0; i < depth; i += 1) {
             double middle = rootbound1 + (rootbound2 - rootbound1) / 2;
             if (x < middle) {
@@ -143,7 +157,7 @@ public class Rasterer {
     }
     private int locateY(double y, double rootbound1, double rootbound2, int depth) {
         int location = 0;
-        if (y < rootbound1 || y > rootbound2) success = false;
+
         for (int i = 0; i < depth; i += 1) {
             double middle = rootbound1 + (rootbound2 - rootbound1) / 2;
             if (y < middle) {

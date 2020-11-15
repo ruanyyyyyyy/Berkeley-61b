@@ -1,3 +1,4 @@
+import example.CSCourseDB;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -6,7 +7,8 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
+import java.util.*;
+import edu.princeton.cs.algs4.Bag;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
-
+    private Map<String, Node> nodes = new HashMap<>();
     /**
      * Example constructor shows how to create and start an XML parser.
      * You do not need to modify this constructor, but you're welcome to do so.
@@ -43,6 +45,65 @@ public class GraphDB {
     }
 
     /**
+     * a node
+     */
+    static class Node {
+        String id;
+        Double lon;
+        Double lat;
+        boolean islocation = false;
+        String locationName;
+        Set<Node> adjacents;
+
+        Node(String _id, String _lon, String _lat) {
+            this.id = _id;
+            this.lon = Double.parseDouble(_lon);
+            this.lat = Double.parseDouble(_lat);
+            this.adjacents = new HashSet<>();
+        }
+    }
+
+    /**
+     * Add a node to the database.
+     *
+     * @param n node
+     */
+    void addNode(Node n) {
+        this.nodes.put(n.id, n);
+    }
+
+    /**
+     * an edge
+     */
+    static class Edge {
+        ArrayList<String> waypoints;
+        String maxspeed;
+        boolean valid;
+
+        Edge() {
+            waypoints = new ArrayList<>();
+            valid = false;
+        }
+    }
+
+    /**
+     * Add an edge to the database.
+     *
+     * @param e edge
+     */
+    void addEdge(Edge e) {
+        /* Assume all the nodes in way appears in nodes too */
+        for (int i = 1; i < e.waypoints.size(); i += 1) {
+            if (nodes.containsKey(e.waypoints.get(i)) && nodes.containsKey(e.waypoints.get(i-1))) {
+                Node nodeCur = nodes.get(e.waypoints.get(i));
+                Node nodePre = nodes.get(e.waypoints.get(i - 1));
+                nodeCur.adjacents.add(nodePre);
+                nodePre.adjacents.add(nodeCur);
+            }
+        }
+    }
+
+    /**
      * Helper to process strings into their "cleaned" form, ignoring punctuation and capitalization.
      * @param s Input string.
      * @return Cleaned string.
@@ -58,6 +119,12 @@ public class GraphDB {
      */
     private void clean() {
         // TODO: Your code here.
+        Map<String, Node> temp = new HashMap<>(nodes);
+        for (Map.Entry<String, Node> entry: temp.entrySet()) {
+            if (entry.getValue().adjacents.size() == 0) {
+                nodes.remove(entry.getKey());
+            }
+        }
     }
 
     /**
@@ -66,7 +133,11 @@ public class GraphDB {
      */
     Iterable<Long> vertices() {
         //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        ArrayList<Long> verts = new ArrayList<>();
+        for (Map.Entry<String, Node> entry: nodes.entrySet()) {
+            verts.add(Long.parseLong(entry.getKey()));
+        }
+        return verts;
     }
 
     /**
@@ -75,7 +146,13 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        ArrayList<Long> verts = new ArrayList<>();
+        String id= String.valueOf(v);
+        Node n = nodes.get(id);
+        for (Node ids: n.adjacents) {
+            verts.add(Long.parseLong(ids.id));
+        }
+        return verts;
     }
 
     /**
@@ -136,7 +213,17 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        double min = 1000000.0;
+        Long target = Long.valueOf(0);
+        for (Map.Entry<String, Node> entry: nodes.entrySet()) {
+            Node n = entry.getValue();
+            double diff = distance(lon, lat, n.lon, n.lat);
+            if (diff < min) {
+                min = diff;
+                target = Long.parseLong(entry.getKey());
+            }
+        }
+        return target;
     }
 
     /**
@@ -145,7 +232,8 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        Node n = nodes.get(String.valueOf(v));
+        return n.lon;
     }
 
     /**
@@ -154,6 +242,7 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        Node n = nodes.get(String.valueOf(v));
+        return n.lat;
     }
 }
