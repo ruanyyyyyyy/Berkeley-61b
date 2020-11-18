@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,75 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+
+        class Pair implements Comparable<Pair> {
+            private long id;
+            private double dis;
+
+            Pair(long _id, double _dis) {
+                this.id= _id;
+                this.dis = _dis;
+            }
+
+            @Override
+            public int compareTo(Pair o) {
+                return (int)(this.dis - o.dis);
+            }
+
+        }
+        //Data structures
+        Map<Long, Double> best = new HashMap<>(); //Best known distance from source to every vertex
+        PriorityQueue<Pair> fringe = new PriorityQueue<Pair>();
+        Map<Long, Long> edgeTo = new HashMap<>();
+        Set<Long> marked = new HashSet<>();
+        /*
+        Map<Long, Double> prioritymap = new HashMap<>();
+        PriorityQueue<Long> fringe = new PriorityQueue<Long>(
+                (e1, e2) -> (int)(prioritymap.get(e1) - prioritymap.get(e2))
+        );*/
+
+        long stId = g.closest(stlon, stlat); //the vertex closest to the start location, return value is the index
+        long destId = g.closest(destlon, destlat);
+        //adding the source to fringe.
+        fringe.offer(new Pair(stId, 0.0));
+        //Initialize best.
+        best.put(stId, 0.0);
+        while (fringe.size() > 0) {
+            Pair v = fringe.poll();
+            Long v_id = v.id;
+            // If v is marked, skip to the next node, i.e. continue.
+            if (marked.contains(v_id)) {
+                continue;
+            }
+
+            // Add v to the marked set.
+            marked.add(v_id);
+            // If v is the goal, we’re done.
+            if (v_id == destId) {
+                break;
+            }
+            // For each edge v → w, relax that edge
+            Iterable<Long> adjacents = g.adjacent(v_id); //return An iterable of the ids of the neighbors of v.
+            for (long w: adjacents) {
+                //v_id==53055000  <- caused by the g.distance tooooo small. Solved by * 10000
+                double curDist = best.get(v_id) + g.distance(v_id, w) * 10000;
+                if (curDist < best.getOrDefault(w, 100000000.0)) {
+                    best.put(w, curDist);
+                    edgeTo.put(w, v_id); // v_id -> w
+                    double w_dis = best.get(w) + g.distance(w, destId) * 10000;
+                    fringe.offer(new Pair(w, w_dis));
+                }
+            }
+        }
+        List<Long> path = new ArrayList<Long>();
+        Long curId = destId;
+        while(curId != stId) {
+            path.add(curId);
+            curId = edgeTo.get(curId);
+        }
+        path.add(stId);
+        Collections.reverse(path);
+        return path;
     }
 
     /**
